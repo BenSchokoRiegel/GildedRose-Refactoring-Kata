@@ -1,11 +1,6 @@
-#include "GildedRose.h"
-
-
-
-
 class ItemUpdater { 
 public:
-    void update(Item& item) final {
+    virtual void update(Item& item) final {
         if (item.sellIn < 0) {
             update_overdue(item);
         } else {
@@ -29,14 +24,22 @@ protected:
 class SulfurasUpdater : public ItemUpdater {
     public:
         void updateQuality(Item& item) override {
-            
+            if (item.quality != 80) {
+                item.quality = 80;
+            }
         }
+        void update_overdue(Item& item) override {
+            
+        }   
+
 };
 
 class ConjuredUpdater : public ItemUpdater {
     public:
         void updateQuality(Item& item) override {
-            if 
+            
+        }
+        void update_overdue(Item& item) override {
         }
 };
 
