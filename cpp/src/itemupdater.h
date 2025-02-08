@@ -1,11 +1,16 @@
 #include "GildedRose.h"
 
 
+
+
 class ItemUpdater { 
 public:
     void update(Item& item) final {
-        updateQuality(item);
-        
+        if (item.sellIn < 0) {
+            update_overdue(item);
+        } else {
+            updateQuality(item);
+        }
         if (item.name != "Sulfuras, Hand of Ragnaros") {
             item.sellIn--;
         }
@@ -18,26 +23,49 @@ public:
 protected:
     // muss von den abgeleiteten Klassen implementiert werden.
     virtual void updateQuality(Item& item) = 0;
+    virtual void update_overdue(Item& item) = 0; 
+};
+
+class SulfurasUpdater : public ItemUpdater {
+    public:
+        void updateQuality(Item& item) override {
+            
+        }
+};
+
+class ConjuredUpdater : public ItemUpdater {
+    public:
+        void updateQuality(Item& item) override {
+            if 
+        }
 };
 
 
 class AgedBrieUpdater : public ItemUpdater {
 public:
     void updateQuality(Item& item) override {
-        
+        max(item.quality += 1, 50);
+    }
+
+    void update_overdue(Item& item) override {
+        max(item.quality += 2, 50);
     }
 };
 
 class BackstagePassUpdater : public ItemUpdater {
 public:
     void updateQuality(Item& item) override {
-       if (item.sellIn < 0)
-        {
-           item.quality = 0;
-           return;
+        if (item.sellIn < 5) {
+            max(item.quality += 3, 50);
+        } else if (item.sellIn < 10) {
+            max(item.quality += 2, 50);
+        } else {
+            max(item.quality += 1, 50);
         }
+    }
 
-      
+    void update_overdue(Item& item) override {
+        item.quality = 0;
     }
 };
 
